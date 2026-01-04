@@ -1,0 +1,23 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Golden triangle vertices (apex at (0,0), base at (1,0) and (φ,0) scaled)
+phi = (1 + np.sqrt(5)) / 2
+def golden_triangle(level=0):
+    if level == 0:
+        return np.array([[0,0], [1,0], [phi, (phi-1)*np.sqrt(3)/2]])  # approximate height
+
+    # Recurse: Bisect and nest
+    verts = golden_triangle(level-1)
+    # Bisect base angle (simplified)
+    mid = (verts[1] + verts[2]) / 2
+    new_verts = np.vstack((verts[0], verts[1], mid))
+    return new_verts
+
+# Plot
+fig, ax = plt.subplots()
+for level in range(4):
+    verts = golden_triangle(level)
+    ax.fill(verts[:,0], verts[:,1], alpha=0.5 - level*0.1, label=f'Level {level}')
+ax.legend()
+plt.show()
